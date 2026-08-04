@@ -1,0 +1,88 @@
+/**
+ * AC7 Ride — API types
+ *
+ * These mirror the Go structs in pkg/models and the domain packages under
+ * internal/. Field names are snake_case because that is what the JSON tags
+ * emit — do not camelCase them, the wire format is the contract.
+ *
+ * Sources:
+ *   pkg/models/user.go, ride.go, payment.go, notification.go
+ *   internal/pricing, internal/geo, internal/safety, internal/earnings
+ */
+
+/* -------------------------------------------------------------------------- */
+/* Users & auth                                                               */
+/* -------------------------------------------------------------------------- */
+
+export type UserRole = 'rider' | 'driver' | 'admin';
+
+export interface User {
+  id: string;
+  email: string;
+  phone_number: string;
+  first_name: string;
+  last_name: string;
+  role: UserRole;
+  is_active: boolean;
+  is_verified: boolean;
+  profile_image?: string | null;
+  /** Short identifier for the control room. ACR prefix; drivers use AC7. */
+  rider_code?: string | null;
+  /** Which channel they agreed to be messaged on, and when. */
+  messaging_channel?: 'none' | 'whatsapp' | 'sms' | 'both';
+  messaging_consent_at?: string | null;
+  /** Null until phone + consent are done, which is what gates the prompt. */
+  onboarded_at?: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface RegisterRequest {
+  email: string;
+  password: string;
+  phone_number: string;
+  first_name: string;
+  last_name: string;
+  role: Exclude<UserRole, 'admin'>;
+}
+
+export interface LoginRequest {
+  email: string;
+  password: string;
+}
+
+export interface LoginResponse {
+  user: User;
+  token: string;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Drivers                                                                    */
+/* -------------------------------------------------------------------------- */
+
+export type ApprovalStatus = 'pending' | 'approved' | 'rejected';
+
+export interface Driver {
+  id: string;
+  user_id: string;
+  license_number: string;
+  vehicle_model: string;
+  vehicle_plate: string;
+  vehicle_color: string;
+  vehicle_year: number;
+  is_available: boolean;
+  is_online: boolean;
+  approval_status: ApprovalStatus;
+  rating: number;
+  total_rides: number;
+  current_latitude?: number | null;
+  current_longitude?: number | null;
+  last_location_update?: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+/** Shape returned by GET /geo/drivers/nearby. */
+export interface NearbyDriver {
+  driver_id: string;
+  latitude:

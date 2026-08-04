@@ -1,0 +1,68 @@
+name: ac7_taxi
+description: AC7 Taxi — licensed minicabs across London. Rider, driver and control centre.
+publish_to: "none"
+
+# version: <marketing version>+<build number>
+#
+# The build number after the + is what Google Play and App Store Connect use to
+# order uploads, and neither will accept the same one twice. Bump it on every
+# upload even when the marketing version is unchanged — a rejected upload after
+# a long build is a miserable way to learn this.
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.4.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # ── Backend ───────────────────────────────────────────────────────────────
+  # The same Supabase project the web app uses. No schema change, no new API:
+  # this talks to the tables, RLS policies and RPCs that already exist and are
+  # already tested in production.
+  supabase_flutter: ^2.5.6
+
+  # ── State ─────────────────────────────────────────────────────────────────
+  # Riverpod over Bloc here. A ride-hailing app is mostly derived state — fare
+  # depends on route, route depends on pickup and destination — and Riverpod
+  # expresses that as a graph that recomputes itself. Bloc would mean writing
+  # those dependencies by hand as event plumbing.
+  flutter_riverpod: ^2.5.1
+  riverpod_annotation: ^2.3.5
+
+  # ── Navigation ────────────────────────────────────────────────────────────
+  # GoRouter, because deep links are not optional for this product: a booking
+  # confirmation notification must open the tracking screen directly, and the
+  # driver-code links printed on cards must open in the app.
+  go_router: ^14.2.0
+
+  # ── Maps and location ─────────────────────────────────────────────────────
+  google_maps_flutter: ^2.6.1
+  geolocator: ^12.0.0
+  # Deep links out to Waze, matching the web app's behaviour.
+  url_launcher: ^6.3.0
+
+  # ── Storage ───────────────────────────────────────────────────────────────
+  # Session tokens go in the OS keychain / keystore, never in shared prefs.
+  flutter_secure_storage: ^9.2.2
+  shared_preferences: ^2.2.3
+
+  # ── UI ────────────────────────────────────────────────────────────────────
+  cached_network_image: ^3.3.1
+  intl: ^0.19.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+  build_runner: ^2.4.11
+  riverpod_generator: ^2.4.0
+  custom_lint: ^0.6.4
+  riverpod_lint: ^2.3.10
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/
+    - assets/icons/
