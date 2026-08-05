@@ -19,7 +19,8 @@ import '../../features/auth/domain/app_user.dart';
 import '../../features/auth/presentation/login_screen.dart';
 import '../../features/auth/presentation/register_screen.dart';
 import '../../features/auth/presentation/forgot_password_screen.dart';
-import '../../features/auth/presentation/splash_screen.dart';
+import '../../features/driver/presentation/driver_dashboard.dart';
+import '../../features/splash/presentation/brand_splash.dart';
 import '../widgets/placeholder_screen.dart';
 
 abstract final class Routes {
@@ -65,6 +66,11 @@ final routerProvider = Provider<GoRouter>((ref) {
         return path == Routes.splash ? null : Routes.splash;
       }
 
+      /// Auth has resolved but the splash is still playing: let it finish.
+      /// Redirecting here would cut the animation off mid-way, which looks
+      /// like a glitch rather than a brand moment.
+      if (path == Routes.splash) return null;
+
       if (auth is AuthSignedOut) {
         return onAuthScreen ? null : Routes.login;
       }
@@ -100,7 +106,25 @@ final routerProvider = Provider<GoRouter>((ref) {
       return null;
     },
     routes: [
-      GoRoute(path: Routes.splash, builder: (_, __) => const SplashScreen()),
+      /// The brand splash. It calls back when its animation is done; the
+      /// redirect above then sends the user wherever they belong, which by
+      /// that point auth has had time to resolve.
+      GoRoute(
+        path: Routes.splash,
+        builder: (context, state) => BrandSplash(
+          onFinished: () {
+            final auth = ref.read(authControllerProvider);
+            if (auth is AuthSignedIn) {
+              context.go(homeFor(auth.user.role));
+            } else if (auth is AuthSignedOut) {
+              context.go(Routes.login);
+            }
+            /// Still AuthLoading: do nothing. The refreshListenable fires the
+            /// redirect the moment the session resolves, so staying put is
+            /// correct rather than guessing and bouncing the user twice.
+          },
+        ),
+      ),
       GoRoute(path: Routes.login, builder: (_, __) => const LoginScreen()),
       GoRoute(path: Routes.register, builder: (_, __) => const RegisterScreen()),
       GoRoute(
@@ -126,14 +150,7 @@ final routerProvider = Provider<GoRouter>((ref) {
           showSignOut: true,
         ),
       ),
-      GoRoute(
-        path: Routes.driver,
-        builder: (_, __) => const PlaceholderScreen(
-          title: 'Driver',
-          detail: 'Dashboard, jobs and earnings — Phase 2.',
-          showSignOut: true,
-        ),
-      ),
+      GoRoute(path: Routes.driver, builder: (_, __) => const DriverDashboard()),
       GoRoute(
         path: Routes.admin,
         builder: (_, __) => const PlaceholderScreen(

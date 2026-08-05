@@ -1,0 +1,47 @@
+<!--
+  GALEYR — app icon.
+
+  ── Why this is not the full logo ─────────────────────────────────────────
+  The lockup is roughly 3:1. An app icon is 1:1 and is judged at 48dp on
+  Android and 60pt on iOS — around a centimetre. Scaling a wide wordmark into
+  that square leaves letterforms two pixels tall: a smear that reads as a
+  smudge of red on a home screen full of competitors.
+
+  So the icon keeps only what survives at that size: the wings, and a single
+  G. The wings carry the brand recognition, the G carries the name, and both
+  are legible at a centimetre. That is the same reasoning behind Uber's bare
+  "U" and Bolt's bare "B" rather than their full wordmarks.
+
+  White on brand red rather than red on white: a light icon disappears against
+  a light wallpaper, and both stores show icons against user-chosen backgrounds.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Galeyr">
+  <title>Galeyr</title>
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0"   stop-color="#A81F1F"/>
+      <stop offset="0.52" stop-color="#8B1A1A"/>
+      <stop offset="1"   stop-color="#4A0000"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Full-bleed. Both stores apply their own rounding, so a rounded corner
+       baked in here would show as a double radius on Android. -->
+  <rect width="512" height="512" fill="url(#g)"/>
+
+  <g fill="#fff">
+    <!-- Wings, shortened and steepened so they still read at 48px -->
+    <path d="M60 168 C 132 196 190 226 236 254 L 210 274 C 156 244 102 210 60 168 Z"/>
+    <path d="M74 224 C 140 246 190 270 230 292 L 206 310 C 158 286 112 262 74 224 Z"/>
+
+    <path d="M452 168 C 380 196 322 226 276 254 L 302 274 C 356 244 410 210 452 168 Z"/>
+    <path d="M438 224 C 372 246 322 270 282 292 L 306 310 C 354 286 400 262 438 224 Z"/>
+  </g>
+
+  <!-- The G, weighted to hold up against the wings rather than float between
+       them. Optically centred: a G's open right side makes a mathematically
+       centred one look pushed left. -->
+  <text x="258" y="330" text-anchor="middle" fill="#fff"
+        font-family="Arial Black, Helvetica, Arial, sans-serif"
+        font-size="250" font-weight="900">G</text>
+</svg>

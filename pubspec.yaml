@@ -1,5 +1,5 @@
 name: ac7_taxi
-description: AC7 Taxi — licensed minicabs across London. Rider, driver and control centre.
+description: Galeyr — licensed minicabs across London. Rider, driver and control centre.
 publish_to: "none"
 
 # version: <marketing version>+<build number>
@@ -66,3 +66,4 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
+    - assets/brand/

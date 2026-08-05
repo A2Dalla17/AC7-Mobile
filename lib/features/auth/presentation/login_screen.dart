@@ -221,6 +221,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         'Control room — ${Env.controlCentreDisplay}',
                       ),
                     ),
+
+                    /// The strapline, once, at the foot of the first screen a
+                    /// person sees. Repeating it on every screen would turn a
+                    /// mark of provenance into chrome nobody reads.
+                    const SizedBox(height: AC7Spacing.xl),
+                    const _PoweredBy(),
                   ],
                 ),
               ),
@@ -264,6 +270,35 @@ class _ErrorBanner extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+/// "POWERED BY AC7 GROUP", with the rules either side, as in the logo.
+class _PoweredBy extends StatelessWidget {
+  const _PoweredBy();
+
+  @override
+  Widget build(BuildContext context) {
+    final line = Theme.of(context).colorScheme.outline;
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(width: 24, child: Divider(color: line, height: 1)),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: AC7Spacing.md),
+          child: Text(
+            'POWERED BY AC7 GROUP',
+            style: TextStyle(
+              fontSize: 9.5,
+              fontWeight: FontWeight.w600,
+              letterSpacing: 2.2,
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
+          ),
+        ),
+        SizedBox(width: 24, child: Divider(color: line, height: 1)),
+      ],
     );
   }
 }

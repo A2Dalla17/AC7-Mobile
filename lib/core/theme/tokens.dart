@@ -23,12 +23,12 @@ import 'package:flutter/material.dart';
 
 abstract final class AC7Colors {
   // ── Brand ────────────────────────────────────────────────────────────────
-  static const brand = Color(0xFF8B0000);
-  static const brandHover = Color(0xFFA50C0C);
+  static const brand = Color(0xFF8B1A1A);
+  static const brandHover = Color(0xFFA81F1F);
   static const brandPressed = Color(0xFF5E0000);
 
   /// Brand text/icons on a light surface.
-  static const brandInkLight = Color(0xFF8B0000);
+  static const brandInkLight = Color(0xFF8B1A1A);
 
   /// Brand text/icons on a dark surface. Lifted to #E5484D, which measures
   /// 5.03:1 on #0B0B0B — the deep red does not pass at any size.

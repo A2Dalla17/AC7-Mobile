@@ -1,0 +1,40 @@
+<!--
+  Galeyr — app icon.
+
+  The GR monogram, which is what makes this version work where the wordmark
+  did not: it is close to square, so it survives being judged at 48dp on
+  Android and 60pt on iOS. The wings are kept but shortened; at a centimetre
+  their tips are sub-pixel and only muddy the silhouette.
+
+  No wordmark and no strapline. "POWERED BY AC7 GROUP" at icon size is a grey
+  smear roughly one pixel tall — it belongs on the splash, where it can be read.
+
+  No rounded corners baked in: both stores apply their own, and pre-rounding
+  produces a visible double radius on Android.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Galeyr">
+  <title>Galeyr</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#A81F1F"/><stop offset=".52" stop-color="#8B1A1A"/><stop offset="1" stop-color="#4A0000"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" fill="url(#bg)"/>
+
+  <g fill="#fff">
+    <!-- Wings: two feathers a side, steeper and shorter than the full lockup -->
+    <path d="M40 196 C 104 214 152 238 190 262 L 166 282 C 118 258 74 232 40 196 Z"/>
+    <path d="M56 250 C 112 266 154 286 186 306 L 164 324 C 122 306 86 284 56 250 Z"/>
+    <path d="M472 196 C 408 214 360 238 322 262 L 346 282 C 394 258 438 232 472 196 Z"/>
+    <path d="M456 250 C 400 266 358 286 326 306 L 348 324 C 390 306 426 284 456 250 Z"/>
+    <!-- Stars from the original, the one small detail that survives at size -->
+    <path d="M120 232 l7 21 22 0 -18 13 7 21 -18 -13 -18 13 7 -21 -18 -13 22 0 Z"/>
+    <path d="M392 232 l7 21 22 0 -18 13 7 21 -18 -13 -18 13 7 -21 -18 -13 22 0 Z"/>
+  </g>
+
+  <!-- GR, interlocked as in the artwork. Optically centred: a G's open side
+       makes a mathematically centred pair look pushed left. -->
+  <text x="256" y="330" text-anchor="middle" fill="#fff"
+        font-family="Georgia, 'Times New Roman', serif"
+        font-size="215" font-weight="700" letter-spacing="-18">GR</text>
+</svg>

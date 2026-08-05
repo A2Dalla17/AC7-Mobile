@@ -1,0 +1,42 @@
+<!--
+  GALEYR — full lockup.
+
+  For the feature graphic, the splash screen and the website header: anywhere
+  the mark has room to be read horizontally. It is NOT the app icon; at 48px
+  a wordmark this wide becomes a smear. See galeyr-icon.svg.
+
+  Drawn as paths rather than shipped as a PNG so it stays sharp on every
+  display and can be recoloured by changing one value.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 420" role="img" aria-label="Galeyr">
+  <title>Galeyr</title>
+  <g fill="#8B1A1A">
+    <!-- Left wing: three feathers, longest on top -->
+    <path d="M96 96 C 250 150 366 214 452 268 L 404 300 C 300 244 190 176 96 96 Z"/>
+    <path d="M118 172 C 258 214 356 262 430 306 L 386 336 C 296 292 200 240 118 172 Z"/>
+    <path d="M150 246 C 262 276 340 310 402 344 L 362 370 C 288 336 214 300 150 246 Z"/>
+
+    <!-- Right wing: mirrored -->
+    <path d="M1104 96 C 950 150 834 214 748 268 L 796 300 C 900 244 1010 176 1104 96 Z"/>
+    <path d="M1082 172 C 942 214 844 262 770 306 L 814 336 C 904 292 1000 240 1082 172 Z"/>
+    <path d="M1050 246 C 938 276 860 310 798 344 L 838 370 C 912 336 986 300 1050 246 Z"/>
+
+    <!-- The sweep that loops beneath the wordmark and rises through the E -->
+    <path d="M600 168 C 706 168 762 214 762 262 C 762 324 686 356 600 356
+             C 514 356 438 324 438 262 C 438 236 452 214 474 199
+             C 462 216 456 234 456 250 C 456 300 520 330 600 330
+             C 680 330 744 300 744 258 C 744 220 690 190 600 190 Z"/>
+
+    <!-- Flanking stars -->
+    <path d="M286 232 l14 43 45 0 -36 27 14 43 -37 -27 -37 27 14 -43 -36 -27 45 0 Z"/>
+    <path d="M914 232 l14 43 45 0 -36 27 14 43 -37 -27 -37 27 14 -43 -36 -27 45 0 Z"/>
+  </g>
+
+  <!--
+    Wordmark. Set in a heavy grotesque with tight tracking, matching the
+    original: the letters nearly touch, which is what gives the mark its weight.
+  -->
+  <text x="600" y="292" text-anchor="middle" fill="#8B1A1A"
+        font-family="Arial Black, Helvetica, Arial, sans-serif"
+        font-size="150" font-weight="900" letter-spacing="-2">GALEYR</text>
+</svg>

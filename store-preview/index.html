@@ -1,0 +1,418 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Galeyr — App Store &amp; Google Play preview</title>
+<style>
+  :root{
+    --brand:#8B1A1A; --brand-hi:#A81F1F; --brand-lo:#5E0000;
+    --ink:#141416; --ink-muted:#5C5C66; --ink-subtle:#8E8E98;
+    --line:#E6E6E8; --surface:#F6F6F7; --bg:#fff;
+    --ios-blue:#0071E3; --play-green:#01875F;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:#EDEDF0;font-family:var(--sans);color:var(--ink);-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1180px;margin:0 auto;padding:32px 20px 80px}
+  .note{background:#FFF7E6;border:1px solid #F0D9A0;border-radius:12px;padding:14px 18px;font-size:14px;line-height:1.55;color:#6B4E00;margin-bottom:28px}
+  .note b{color:#4A3600}
+  h2.sec{font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#77777F;margin:44px 0 14px}
+
+  /* ---------- shared phone ---------- */
+  .phone{width:250px;height:541px;border-radius:34px;background:#000;padding:7px;flex:0 0 auto;box-shadow:0 10px 34px rgba(0,0,0,.22)}
+  .screen{width:100%;height:100%;border-radius:27px;overflow:hidden;background:#fff;position:relative;display:flex;flex-direction:column}
+  .status{height:22px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;font-size:9.5px;font-weight:700;flex:0 0 auto}
+  .status .dots{display:flex;gap:3px;align-items:center}
+  .status .bar{width:2.5px;background:currentColor;border-radius:1px}
+  .sheet{background:#fff;border-radius:20px 20px 0 0;padding:12px 14px 10px;flex:1;display:flex;flex-direction:column;gap:9px;overflow:hidden}
+  .grab{width:32px;height:4px;border-radius:2px;background:#D2D2D6;margin:0 auto 4px}
+  .h-title{font-size:15px;font-weight:800;letter-spacing:-.02em}
+  .field{height:34px;border:1px solid var(--line);background:var(--surface);border-radius:9px;display:flex;align-items:center;gap:7px;padding:0 10px;font-size:10.5px;color:var(--ink-subtle)}
+  .row{display:flex;align-items:center;gap:9px;padding:7px 0}
+  .ic{width:28px;height:28px;border-radius:8px;background:var(--surface);display:grid;place-items:center;flex:0 0 auto;color:var(--ink-muted);font-size:12px}
+  .ic.brand{background:#FADEDE;color:var(--brand)}
+  .t1{font-size:10.5px;font-weight:650;line-height:1.25}
+  .t2{font-size:9.5px;color:var(--ink-muted);line-height:1.3}
+  .btn{height:36px;border-radius:99px;background:linear-gradient(135deg,var(--brand-hi),var(--brand) 52%,var(--brand-lo));color:#fff;display:grid;place-items:center;font-size:11.5px;font-weight:700}
+  .btn.ghost{background:none;border:1.4px solid rgba(139,0,0,.35);color:var(--brand)}
+  .tabbar{height:46px;background:linear-gradient(135deg,var(--brand-hi),var(--brand) 52%,var(--brand-lo));display:flex;align-items:center;justify-content:space-around;padding:0 6px;flex:0 0 auto}
+  .tab{display:flex;flex-direction:column;align-items:center;gap:2px;color:rgba(255,255,255,.65);font-size:7.5px;font-weight:650}
+  .tab.on{color:#fff}
+  .tab .g{font-size:14px;line-height:1}
+  .fab{width:34px;height:34px;border-radius:99px;background:#fff;color:var(--brand-lo);display:grid;place-items:center;font-size:15px;margin-top:-16px;box-shadow:0 3px 10px rgba(0,0,0,.3)}
+  .map{flex:1;position:relative;background:
+      linear-gradient(90deg,#EDEAE4 1.5px,transparent 1.5px) 0 0/46px 46px,
+      linear-gradient(#EDEAE4 1.5px,transparent 1.5px) 0 0/46px 46px,
+      linear-gradient(115deg,#F6F4EF,#EAE7E0);}
+  .map:after{content:"";position:absolute;left:12%;top:0;width:9px;height:100%;background:#F7E9A8;transform:rotate(9deg)}
+  .map:before{content:"";position:absolute;left:0;top:46%;width:100%;height:8px;background:#F7E9A8;transform:rotate(-6deg)}
+  .pin{position:absolute;width:15px;height:15px;border-radius:99px;background:#fff;border:3.5px solid var(--brand);left:50%;top:52%;transform:translate(-50%,-50%);z-index:2;box-shadow:0 2px 7px rgba(0,0,0,.3)}
+  .codechip{position:absolute;left:9px;top:8px;background:rgba(255,255,255,.94);border-radius:99px;padding:3px 8px;font-size:8.5px;font-weight:700;z-index:3;box-shadow:0 2px 7px rgba(0,0,0,.14)}
+  .codechip span{color:var(--brand);font-family:ui-monospace,monospace}
+  .pricerow{display:flex;align-items:center;gap:9px;padding:7px 9px;border:1px solid var(--line);border-radius:11px}
+  .pricerow.sel{border-color:var(--brand);background:#FDF2F2;border-width:1.6px}
+  .price{margin-left:auto;font-weight:800;font-size:12px}
+  .stat{flex:1;border:1px solid var(--line);border-radius:11px;padding:8px 9px}
+  .stat .v{font-size:15px;font-weight:800;letter-spacing:-.02em}
+  .stat .l{font-size:8.5px;color:var(--ink-muted);margin-top:1px}
+  .cap{text-align:center;font-size:11.5px;color:#6B6B75;margin-top:9px;font-weight:600}
+  .shots{display:flex;gap:16px;overflow-x:auto;padding:4px 2px 14px;scrollbar-width:thin}
+
+  /* ---------- App Store ---------- */
+  .ios{background:#fff;border-radius:18px;padding:26px 28px;box-shadow:0 2px 14px rgba(0,0,0,.07)}
+  .ios-head{display:flex;gap:18px;align-items:flex-start}
+  .appicon{width:112px;height:112px;border-radius:25px;flex:0 0 auto;background:linear-gradient(150deg,#A50C0C,#8B0000 50%,#4A0000);display:grid;place-items:center;box-shadow:0 4px 16px rgba(139,0,0,.34)}
+  .appicon svg{width:64px;height:64px}
+  .ios-name{font-size:23px;font-weight:700;letter-spacing:-.02em;line-height:1.15}
+  .ios-sub{font-size:14px;color:#6E6E73;margin-top:3px;line-height:1.35}
+  .get{margin-top:14px;display:flex;align-items:center;gap:14px}
+  .getbtn{background:var(--ios-blue);color:#fff;border:0;border-radius:99px;padding:6px 26px;font-size:15px;font-weight:700;cursor:pointer}
+  .ios-meta{display:flex;gap:0;border-top:1px solid #E8E8ED;border-bottom:1px solid #E8E8ED;margin-top:22px;padding:13px 0}
+  .ios-meta div{flex:1;text-align:center;border-right:1px solid #E8E8ED}
+  .ios-meta div:last-child{border:0}
+  .mk{font-size:10px;font-weight:700;color:#8E8E93;text-transform:uppercase;letter-spacing:.05em}
+  .mv{font-size:16px;font-weight:700;color:#6E6E73;margin-top:3px}
+  .mvs{font-size:10px;color:#8E8E93}
+  .desc{font-size:14.5px;line-height:1.55;color:#1D1D1F;margin-top:8px}
+  .desc p{margin:0 0 11px}
+  .desc b{font-weight:650}
+
+  /* ---------- Play Store ---------- */
+  .play{background:#fff;border-radius:18px;padding:0 0 26px;box-shadow:0 2px 14px rgba(0,0,0,.07);overflow:hidden}
+  .feature{height:216px;background:linear-gradient(120deg,#5E0000,#8B0000 46%,#A50C0C);display:flex;align-items:center;justify-content:space-between;padding:0 44px;color:#fff;position:relative;overflow:hidden}
+  .feature:after{content:"";position:absolute;right:-70px;top:-70px;width:290px;height:290px;border-radius:99px;background:rgba(255,255,255,.06)}
+  .feature h3{font-size:33px;margin:0;letter-spacing:-.03em;line-height:1.1;font-weight:800}
+  .feature p{margin:9px 0 0;opacity:.9;font-size:15px}
+  .play-head{display:flex;gap:20px;padding:24px 28px 0;align-items:flex-start}
+  .play-name{font-size:26px;font-weight:700;letter-spacing:-.02em;color:#202124}
+  .play-dev{color:var(--play-green);font-weight:600;font-size:14.5px;margin-top:3px}
+  .play-meta{display:flex;margin:22px 28px 0;border-radius:10px}
+  .play-meta div{flex:1;text-align:center;border-right:1px solid #E8EAED;padding:2px 0}
+  .play-meta div:last-child{border:0}
+  .pmv{font-weight:700;font-size:15px;color:#202124;display:flex;align-items:center;justify-content:center;gap:3px}
+  .pml{font-size:11.5px;color:#5F6368;margin-top:3px}
+  .install{margin:20px 28px 0;background:var(--play-green);color:#fff;border:0;border-radius:8px;padding:11px 0;width:calc(100% - 56px);font-size:15px;font-weight:600;cursor:pointer}
+  .about{padding:0 28px;font-size:14.5px;line-height:1.6;color:#202124}
+  .chips{display:flex;gap:8px;flex-wrap:wrap;padding:0 28px;margin-top:14px}
+  .chip{background:#F1F3F4;border-radius:8px;padding:5px 12px;font-size:12.5px;color:#5F6368}
+  .stars{color:#F5A623;letter-spacing:1px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="note">
+    <b>Preview only.</b> Nothing here is a real listing — no developer account exists yet and no fees have been paid.
+    The screenshots are faithful recreations of the app's designs, not captures of running code: in the Flutter app,
+    sign-in and registration are built, and the booking, driver and wallet screens are still to come.
+    Ratings and download counts are placeholders — a new listing shows <b>no rating at all</b> until real users leave one.
+  </div>
+
+  <!-- ============================ APP STORE ============================ -->
+  <h2 class="sec">Apple App Store</h2>
+  <div class="ios">
+    <div class="ios-head">
+      <div class="appicon" style="overflow:hidden">
+        <svg viewBox="0 0 512 512" style="width:100%;height:100%" xmlns="http://www.w3.org/2000/svg">
+          <defs><linearGradient id="gi1" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#A81F1F"/><stop offset=".52" stop-color="#8B1A1A"/><stop offset="1" stop-color="#4A0000"/>
+          </linearGradient></defs>
+          <rect width="512" height="512" fill="url(#gi1)"/>
+          <g fill="#fff">
+            <path d="M60 168 C 132 196 190 226 236 254 L 210 274 C 156 244 102 210 60 168 Z"/>
+            <path d="M74 224 C 140 246 190 270 230 292 L 206 310 C 158 286 112 262 74 224 Z"/>
+            <path d="M452 168 C 380 196 322 226 276 254 L 302 274 C 356 244 410 210 452 168 Z"/>
+            <path d="M438 224 C 372 246 322 270 282 292 L 306 310 C 354 286 400 262 438 224 Z"/>
+          </g>
+          <text x="258" y="330" text-anchor="middle" fill="#fff" font-family="Arial Black, Helvetica, Arial, sans-serif" font-size="250" font-weight="900">G</text>
+        </svg>
+      </div>
+      <div style="min-width:0">
+        <div class="ios-name">Galeyr</div>
+        <div class="ios-sub">Licensed minicabs across London</div>
+        <div class="ios-sub" style="margin-top:9px;font-size:13px">AC7 GROUP LTD</div>
+        <div class="get">
+          <button class="getbtn">GET</button>
+          <span style="color:#8E8E93;font-size:12px">In-App Purchases</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="ios-meta">
+      <div><div class="mk">Ratings</div><div class="mv">—</div><div class="mvs">No Ratings Yet</div></div>
+      <div><div class="mk">Age</div><div class="mv">4+</div><div class="mvs">Years Old</div></div>
+      <div><div class="mk">Category</div><div class="mv" style="font-size:22px">🚕</div><div class="mvs">Travel</div></div>
+      <div><div class="mk">Developer</div><div class="mv" style="font-size:22px">👤</div><div class="mvs">AC7 GROUP</div></div>
+      <div><div class="mk">Language</div><div class="mv">EN</div><div class="mvs">English (UK)</div></div>
+    </div>
+
+    <h3 style="font-size:20px;margin:26px 0 12px;letter-spacing:-.02em">Preview</h3>
+    <div class="shots" id="shots-ios"></div>
+
+    <h3 style="font-size:20px;margin:22px 0 10px;letter-spacing:-.02em">Description</h3>
+    <div class="desc">
+      <p>A licensed minicab, booked in a few taps, anywhere in London.</p>
+      <p><b>Know the price before you go.</b> The fare appears before you confirm and does not change because the traffic did. No meter, no guessing at the end of the journey.</p>
+      <p><b>Know who is collecting you.</b> Every Galeyr driver has a code. You get the code, the registration and the driver's name before the car arrives — and anyone can check a code without an account.</p>
+      <p><b>Licensed and insured, every time.</b> Private hire licence, hire-and-reward insurance, MOT and right to work are verified before a driver takes a single job, and re-checked as they expire.</p>
+      <p><b>Airports, done properly.</b> Heathrow, Gatwick, Stansted, Luton and London City, saved for one tap. We track the flight, so a delayed landing is not a missed car.</p>
+      <p><b>Or just ring us.</b> The control room is staffed 24 hours a day, every day of the year, including Christmas.</p>
+      <p style="color:#6E6E73;font-size:13px">Driving for Galeyr? Go online when it suits you, see the fare before you accept, and get paid weekly.</p>
+    </div>
+  </div>
+
+  <!-- ============================ PLAY STORE ============================ -->
+  <h2 class="sec">Google Play Store</h2>
+  <div class="play">
+    <div class="feature" style="justify-content:center;text-align:center;flex-direction:column;height:250px">
+      <svg viewBox="0 0 1200 420" style="width:min(560px,74%);position:relative;z-index:1" xmlns="http://www.w3.org/2000/svg">
+        <g fill="#fff">
+          <path d="M96 96 C 250 150 366 214 452 268 L 404 300 C 300 244 190 176 96 96 Z"/>
+          <path d="M118 172 C 258 214 356 262 430 306 L 386 336 C 296 292 200 240 118 172 Z"/>
+          <path d="M150 246 C 262 276 340 310 402 344 L 362 370 C 288 336 214 300 150 246 Z"/>
+          <path d="M1104 96 C 950 150 834 214 748 268 L 796 300 C 900 244 1010 176 1104 96 Z"/>
+          <path d="M1082 172 C 942 214 844 262 770 306 L 814 336 C 904 292 1000 240 1082 172 Z"/>
+          <path d="M1050 246 C 938 276 860 310 798 344 L 838 370 C 912 336 986 300 1050 246 Z"/>
+          <path d="M600 168 C 706 168 762 214 762 262 C 762 324 686 356 600 356 C 514 356 438 324 438 262 C 438 236 452 214 474 199 C 462 216 456 234 456 250 C 456 300 520 330 600 330 C 680 330 744 300 744 258 C 744 220 690 190 600 190 Z"/>
+          <path d="M286 232 l14 43 45 0 -36 27 14 43 -37 -27 -37 27 14 -43 -36 -27 45 0 Z"/>
+          <path d="M914 232 l14 43 45 0 -36 27 14 43 -37 -27 -37 27 14 -43 -36 -27 45 0 Z"/>
+        </g>
+        <text x="600" y="292" text-anchor="middle" fill="#fff" font-family="Arial Black, Helvetica, Arial, sans-serif" font-size="150" font-weight="900" letter-spacing="-2">GALEYR</text>
+      </svg>
+      <p style="position:relative;z-index:1;margin-top:14px;font-size:16px;letter-spacing:.02em">Licensed minicabs across London</p>
+    </div>
+
+    <div class="play-head">
+      <div style="width:74px;height:74px;border-radius:17px;flex:0 0 auto;background:linear-gradient(150deg,#A50C0C,#8B0000 50%,#4A0000);display:grid;place-items:center;box-shadow:0 2px 10px rgba(0,0,0,.2)">
+        <svg viewBox="0 0 512 512" style="width:100%;height:100%" xmlns="http://www.w3.org/2000/svg">
+          <defs><linearGradient id="gi3" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#A81F1F"/><stop offset=".52" stop-color="#8B1A1A"/><stop offset="1" stop-color="#4A0000"/>
+          </linearGradient></defs>
+          <rect width="512" height="512" fill="url(#gi3)"/>
+          <g fill="#fff">
+            <path d="M60 168 C 132 196 190 226 236 254 L 210 274 C 156 244 102 210 60 168 Z"/>
+            <path d="M74 224 C 140 246 190 270 230 292 L 206 310 C 158 286 112 262 74 224 Z"/>
+            <path d="M452 168 C 380 196 322 226 276 254 L 302 274 C 356 244 410 210 452 168 Z"/>
+            <path d="M438 224 C 372 246 322 270 282 292 L 306 310 C 354 286 400 262 438 224 Z"/>
+          </g>
+          <text x="258" y="330" text-anchor="middle" fill="#fff" font-family="Arial Black, Helvetica, Arial, sans-serif" font-size="250" font-weight="900">G</text>
+        </svg>
+      </div>
+      <div>
+        <div class="play-name">Galeyr</div>
+        <div class="play-dev">AC7 GROUP LTD</div>
+        <div style="color:#5F6368;font-size:13px;margin-top:3px">Contains ads · In-app purchases</div>
+      </div>
+    </div>
+
+    <div class="play-meta">
+      <div><div class="pmv">— <span class="stars">★</span></div><div class="pml">No reviews yet</div></div>
+      <div><div class="pmv">—</div><div class="pml">Downloads</div></div>
+      <div><div class="pmv" style="font-size:13px;border:1.4px solid #5F6368;border-radius:3px;width:26px;margin:0 auto;padding:1px 0">3+</div><div class="pml">Rated for 3+</div></div>
+    </div>
+
+    <button class="install">Install</button>
+
+    <h3 style="font-size:19px;margin:30px 28px 12px;letter-spacing:-.01em">Screenshots</h3>
+    <div class="shots" style="padding-left:28px;padding-right:28px" id="shots-play"></div>
+
+    <h3 style="font-size:19px;margin:18px 28px 10px;letter-spacing:-.01em">About this app</h3>
+    <div class="about">
+      A licensed minicab, booked in a few taps, anywhere in London.<br><br>
+      <b>Know the price before you go.</b> The fare appears before you confirm and does not change because the traffic did.<br><br>
+      <b>Know who is collecting you.</b> Every Galeyr driver has a code — you get it, plus the registration and the driver's name, before the car arrives.<br><br>
+      <b>Licensed and insured.</b> Private hire licence, hire-and-reward insurance and MOT verified before a driver takes a single job.<br><br>
+      <b>Airports.</b> Heathrow, Gatwick, Stansted, Luton and London City saved for one tap, with flight tracking.<br><br>
+      <b>24-hour control room.</b> Every day of the year, including Christmas.
+    </div>
+    <div class="chips">
+      <span class="chip">Travel &amp; Local</span><span class="chip">Taxi</span>
+      <span class="chip">London</span><span class="chip">Minicab</span><span class="chip">Galeyr</span><span class="chip">Airport transfer</span>
+    </div>
+  </div>
+</div>
+
+<script>
+/* One screenshot definition, rendered into both stores. Keeping a single source
+   means a copy change lands in the App Store and Play Store previews together —
+   two hand-maintained copies is how the listings quietly drift apart. */
+const status = `<div class="status" style="color:#141416">
+  <span>9:41</span>
+  <span class="dots">
+    <span class="bar" style="height:5px"></span><span class="bar" style="height:7px"></span>
+    <span class="bar" style="height:9px"></span><span style="font-size:9px">▮</span>
+  </span></div>`;
+
+const tabbar = (active) => `<div class="tabbar">
+  ${['Home','Rides'].map(t=>`<div class="tab ${active===t?'on':''}"><span class="g">${t==='Home'?'⌂':'▤'}</span>${t}</div>`).join('')}
+  <div class="tab on"><div class="fab">🚕</div><span style="margin-top:2px">Book</span></div>
+  ${['Service','Profile'].map(t=>`<div class="tab ${active===t?'on':''}"><span class="g">${t==='Service'?'▩':'☺'}</span>${t}</div>`).join('')}
+</div>`;
+
+const SHOTS = [
+{ cap:'Sign in', html:`
+  <div class="screen">${status}
+    <div style="padding:26px 18px;flex:1;display:flex;flex-direction:column;gap:11px">
+      <div style="font-size:22px;font-weight:800;letter-spacing:-.03em;margin-top:14px">Welcome back</div>
+      <div class="t2" style="margin-bottom:8px">Sign in to book a car or start your shift.</div>
+      <div class="field">✉︎ &nbsp;you@example.com</div>
+      <div class="field">🔒 &nbsp;••••••••</div>
+      <div style="text-align:right;font-size:9.5px;color:var(--brand);font-weight:650">Forgot password?</div>
+      <div class="btn" style="margin-top:4px">Sign in</div>
+      <div style="text-align:center;font-size:9.5px;color:var(--ink-muted);margin-top:2px">
+        New to Galeyr? <b style="color:var(--brand)">Create an account</b></div>
+      <div style="flex:1"></div>
+      <div class="btn ghost">📞 Control room — 24/7</div>
+    </div>
+  </div>`},
+
+{ cap:'Where to?', html:`
+  <div class="screen">${status}
+    <div class="map"><div class="codechip">Your code <span>ACR01002</span></div><div class="pin"></div></div>
+    <div class="sheet" style="flex:0 0 63%">
+      <div class="grab"></div>
+      <div class="t2" style="display:flex;gap:5px;align-items:center">
+        <span style="width:6px;height:6px;border-radius:99px;background:#1B873F"></span>Whitehorse Lane</div>
+      <div class="h-title">Where are you going?</div>
+      <div class="field">🔍 &nbsp;Enter a postcode or address</div>
+      <div style="font-size:8px;font-weight:700;letter-spacing:.08em;color:var(--ink-subtle);text-transform:uppercase;margin-top:2px">Popular destinations</div>
+      <div style="border:1px solid var(--line);border-radius:11px;overflow:hidden">
+        ${[['✈︎','Heathrow Airport','All terminals'],['✈︎','Gatwick Airport','North &amp; South'],['🚆',"King's Cross",'Eurostar &amp; rail']]
+          .map((r,i)=>`<div class="row" style="padding:6px 9px;${i?'border-top:1px solid var(--line)':''}">
+            <div class="ic">${r[0]}</div><div style="min-width:0"><div class="t1">${r[1]}</div><div class="t2">${r[2]}</div></div>
+            <div style="margin-left:auto;color:var(--ink-subtle);font-size:11px">›</div></div>`).join('')}
+      </div>
+    </div>${tabbar('Home')}
+  </div>`},
+
+{ cap:'Choose your car', html:`
+  <div class="screen">${status}
+    <div class="map" style="flex:0 0 34%"><div class="pin" style="top:40%"></div>
+      <div class="pin" style="left:66%;top:74%;background:var(--brand);border-color:#fff"></div></div>
+    <div class="sheet" style="flex:1">
+      <div class="grab"></div>
+      <div class="row" style="padding:2px 0">
+        <div class="ic brand">📍</div><div><div class="t1">Whitehorse Lane</div><div class="t2">Heathrow Terminal 5</div></div>
+      </div>
+      <div style="display:flex;gap:7px;font-size:9px;color:var(--ink-muted);padding:5px 9px;background:var(--surface);border-radius:9px">
+        <b style="color:var(--ink)">17.4 miles</b> · <b style="color:var(--ink)">48 min</b> · with traffic
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <div class="pricerow sel"><div class="ic brand">🚗</div>
+          <div><div class="t1">Galeyr Standard</div><div class="t2">Saloon · 4 seats</div></div><div class="price">£42.85</div></div>
+        <div class="pricerow"><div class="ic">🚙</div>
+          <div><div class="t1">Galeyr Estate</div><div class="t2">Extra luggage · 4</div></div><div class="price">£51.40</div></div>
+        <div class="pricerow"><div class="ic">🚐</div>
+          <div><div class="t1">Galeyr MPV</div><div class="t2">Up to 6 seats</div></div><div class="price">£60.25</div></div>
+      </div>
+      <div style="flex:1"></div>
+      <div class="btn">Book Galeyr Standard · £42.85</div>
+    </div>
+  </div>`},
+
+{ cap:'Your driver is on the way', html:`
+  <div class="screen">${status}
+    <div class="map" style="flex:0 0 52%"><div class="pin" style="top:62%"></div>
+      <div style="position:absolute;left:34%;top:32%;width:19px;height:19px;border-radius:6px;background:#1F1F1F;display:grid;place-items:center;color:#fff;font-size:9px;z-index:2">🚕</div></div>
+    <div class="sheet" style="flex:1">
+      <div class="grab"></div>
+      <div style="text-align:center"><div style="font-size:21px;font-weight:800;letter-spacing:-.03em">4 min away</div>
+        <div class="t2">Yusuf is on the way</div></div>
+      <div class="row" style="border:1px solid var(--line);border-radius:11px;padding:8px 9px">
+        <div class="ic brand" style="border-radius:99px">Y</div>
+        <div><div class="t1">Yusuf · <span style="color:#F5A623">★</span> 4.9</div>
+          <div class="t2">Toyota Prius · Silver</div></div>
+        <div style="margin-left:auto;text-align:right">
+          <div style="font-family:ui-monospace,monospace;font-weight:800;font-size:11px">LV21 KHF</div>
+          <div class="t2" style="font-size:8px">Code <b style="color:var(--brand)">ACD00417</b></div></div>
+      </div>
+      <div style="display:flex;gap:7px">
+        <div class="btn ghost" style="flex:1;height:32px;font-size:10px">💬 Message</div>
+        <div class="btn ghost" style="flex:1;height:32px;font-size:10px">📞 Call</div>
+      </div>
+      <div style="flex:1"></div>
+      <div class="t2" style="text-align:center">Fare <b style="color:var(--ink)">£42.85</b> · paid by card</div>
+    </div>
+  </div>`},
+
+{ cap:'Driver dashboard', html:`
+  <div class="screen">${status}
+    <div style="padding:14px 14px 0;flex:1;display:flex;flex-direction:column;gap:9px">
+      <div style="display:flex;align-items:center;gap:7px">
+        <div class="ic brand" style="border-radius:99px">Y</div>
+        <div><div class="t1">Good evening, Yusuf</div><div class="t2">Online · 3h 12m today</div></div>
+        <div style="margin-left:auto;background:#E6F4EA;color:#1B873F;font-size:8px;font-weight:800;padding:3px 8px;border-radius:99px">ONLINE</div>
+      </div>
+      <div style="display:flex;gap:7px">
+        <div class="stat"><div class="v">£184.20</div><div class="l">Today</div></div>
+        <div class="stat"><div class="v">11</div><div class="l">Trips</div></div>
+        <div class="stat"><div class="v">4.9</div><div class="l">Rating</div></div>
+      </div>
+      <div style="font-size:8px;font-weight:700;letter-spacing:.08em;color:var(--ink-subtle);text-transform:uppercase;margin-top:2px">New request</div>
+      <div style="border:1.6px solid var(--brand);border-radius:13px;padding:10px;background:#FDF2F2">
+        <div style="display:flex;align-items:baseline;gap:6px">
+          <div style="font-size:19px;font-weight:800;letter-spacing:-.03em">£42.85</div>
+          <div class="t2">17.4 mi · 48 min</div>
+          <div style="margin-left:auto" class="t2">2 min away</div></div>
+        <div style="margin-top:7px;font-size:9.5px;line-height:1.5">
+          <div>◉ Whitehorse Lane, SE25</div><div style="color:var(--ink-muted)">◎ Heathrow Terminal 5</div></div>
+        <div style="display:flex;gap:6px;margin-top:9px">
+          <div class="btn ghost" style="flex:0 0 34%;height:30px;font-size:10px">Decline</div>
+          <div class="btn" style="flex:1;height:30px;font-size:10px">Accept</div></div>
+      </div>
+    </div>${tabbar('Home')}
+  </div>`},
+
+{ cap:'Wallet &amp; payments', html:`
+  <div class="screen">${status}
+    <div style="padding:14px;flex:1;display:flex;flex-direction:column;gap:9px">
+      <div class="h-title" style="font-size:17px">Wallet</div>
+      <div style="border-radius:14px;padding:14px;background:linear-gradient(135deg,var(--brand-hi),var(--brand) 52%,var(--brand-lo));color:#fff">
+        <div style="font-size:9px;opacity:.85">Galeyr balance</div>
+        <div style="font-size:25px;font-weight:800;letter-spacing:-.03em;margin-top:2px">£24.60</div>
+        <div style="font-size:9px;opacity:.85;margin-top:7px">Top up · Add card</div>
+      </div>
+      <div style="font-size:8px;font-weight:700;letter-spacing:.08em;color:var(--ink-subtle);text-transform:uppercase">Recent</div>
+      <div style="border:1px solid var(--line);border-radius:11px;overflow:hidden">
+        ${[['Heathrow T5','Today · card','−£42.85'],['Top up','Yesterday','+£30.00'],['Croydon → Bromley','2 Aug · wallet','−£18.40']]
+          .map((r,i)=>`<div class="row" style="padding:7px 9px;${i?'border-top:1px solid var(--line)':''}">
+            <div class="ic">${i===1?'＋':'🚕'}</div>
+            <div><div class="t1">${r[0]}</div><div class="t2">${r[1]}</div></div>
+            <div style="margin-left:auto;font-weight:750;font-size:10.5px;${r[2][0]==='+'?'color:#1B873F':''}">${r[2]}</div></div>`).join('')}
+      </div>
+    </div>${tabbar('Profile')}
+  </div>`},
+
+{ cap:'Profile &amp; settings', html:`
+  <div class="screen">${status}
+    <div style="padding:14px;flex:1;display:flex;flex-direction:column;gap:9px">
+      <div style="text-align:center;padding:6px 0">
+        <div class="ic brand" style="width:52px;height:52px;border-radius:99px;margin:0 auto;font-size:18px;font-weight:800">AH</div>
+        <div class="t1" style="font-size:13px;margin-top:6px">Abdullahi Hassan</div>
+        <div class="t2">Rider · <span style="font-family:ui-monospace,monospace;color:var(--brand);font-weight:700">ACR01002</span></div>
+      </div>
+      <div style="display:flex;gap:7px">
+        <div class="stat" style="text-align:center"><div class="v">47</div><div class="l">Trips</div></div>
+        <div class="stat" style="text-align:center"><div class="v">4.9</div><div class="l">Your rating</div></div>
+      </div>
+      <div style="border:1px solid var(--line);border-radius:11px;overflow:hidden">
+        ${[['👤','Account','Messages, language, theme'],['💳','Payment and wallet','Cards, balance, receipts'],
+           ['📍','Saved places',''],['🛡','Safety',''],['🧭','Open Waze','Live traffic and hazards']]
+          .map((r,i)=>`<div class="row" style="padding:7px 9px;${i?'border-top:1px solid var(--line)':''}">
+            <div class="ic">${r[0]}</div>
+            <div><div class="t1">${r[1]}</div>${r[2]?`<div class="t2">${r[2]}</div>`:''}</div>
+            <div style="margin-left:auto;color:var(--ink-subtle);font-size:11px">›</div></div>`).join('')}
+      </div>
+    </div>${tabbar('Profile')}
+  </div>`},
+];
+
+const render = (id) => {
+  document.getElementById(id).innerHTML = SHOTS.map(s =>
+    `<div><div class="phone">${s.html}</div><div class="cap">${s.cap}</div></div>`).join('');
+};
+render('shots-ios'); render('shots-play');
+</script>
+</body>
+</html>

@@ -1,29 +1,5 @@
-/// Shown only while the stored session is being resolved.
+/// Superseded by features/splash/presentation/brand_splash.dart.
 ///
-/// Not a branded loading screen with a timer — it disappears the moment auth
-/// resolves, usually in well under a second. Anything more elaborate would be
-/// a delay added for its own sake.
-
-import 'package:flutter/material.dart';
-
-import '../../../core/theme/tokens.dart';
-
-class SplashScreen extends StatelessWidget {
-  const SplashScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: SizedBox(
-          height: 28,
-          width: 28,
-          child: CircularProgressIndicator(
-            strokeWidth: 2.5,
-            color: AC7Colors.brand,
-          ),
-        ),
-      ),
-    );
-  }
-}
+/// Nothing imports this. It is left here only because OneDrive would not
+/// release the file for deletion; remove it whenever you are on Windows.
+library;
